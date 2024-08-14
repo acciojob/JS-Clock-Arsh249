@@ -1,28 +1,40 @@
-//your code here
 function updateClock() {
     const now = new Date();
 
-    const secondHand = document.querySelector('.second-hand');
-    const minuteHand = document.querySelector('.minute-hand');
-    const hourHand = document.querySelector('.hour-hand');
+    // Select the minute hand element
+    const minuteHand = document.querySelector('.min-hand');
 
-    const seconds = now.getSeconds();
+    // Get the current minutes
     const minutes = now.getMinutes();
-    const hours = now.getHours();
+    
+    // Calculate the degrees for the minute hand rotation
+    const minsDegrees = 6 * minutes + 90;
+    
+    // Convert degrees to radians
+    const radians = minsDegrees * Math.PI / 180;
 
-    // Calculate the degrees for each hand
-    const secondsDegrees = ((seconds / 60) * 360) + 90;
-    const minutesDegrees = ((minutes / 60) * 360) + ((seconds / 60) * 6) + 90;
-    const hoursDegrees = ((hours / 12) * 360) + ((minutes / 60) * 30) + 90;
+    // Build the rotation matrix
+    let a = Math.cos(radians);
+    let b = Math.sin(radians);
+    let c = -b;
+    let d = a;
+    let e = 0;
+    let f = 0;
 
-    // Apply the rotation using transform
-    secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
-    minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
-    hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+    // Round values to six decimal places
+    a = parseFloat(a.toFixed(6));
+    b = parseFloat(b.toFixed(6));
+    c = parseFloat(c.toFixed(6));
+    d = parseFloat(d.toFixed(6));
+    e = parseFloat(e.toFixed(6));
+    f = parseFloat(f.toFixed(6));
+
+    // Apply the matrix transformation to the minute hand
+    minuteHand.style.transform = `matrix(${a}, ${b}, ${c}, ${d}, ${e}, ${f})`;
 }
 
-// Update the clock every second
-setInterval(updateClock, 1000);
+// Update the clock every minute
+setInterval(updateClock, 60000);
 
 // Initial call to set the clock hands immediately
 updateClock();
